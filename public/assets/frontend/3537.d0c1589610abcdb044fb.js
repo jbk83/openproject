@@ -1,0 +1,1 @@
+(self.webpackChunkopenproject_frontend=self.webpackChunkopenproject_frontend||[]).push([[3537],{93537:()=>{var n;n=function(){var e=jQuery("#new_user_login");""===this.value?(e.hide(),e.find("input").prop("disabled",!0)):(e.show(),e.find("input").prop("disabled",!1))},jQuery(function(){jQuery("#user_auth_source_id").on("change.toggleNewUserLogin",n),n()})}}]);
