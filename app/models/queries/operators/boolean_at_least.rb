@@ -26,17 +26,17 @@
 # See COPYRIGHT and LICENSE files for more details.
 #++
 
-module Queries::Filters::Strategies
-  class CfListOptional < ListOptional
-    private
+module Queries::Operators
+  class BooleanAtLeast < Base
+    label 'equals_at_least'
+    set_symbol '=+'
 
-    def operator_map
-      super_value = super.dup
-      super_value['!*'] = ::Queries::Operators::NoneOrBlank
-      super_value['*'] = ::Queries::Operators::AllAndNonBlank
-      super_value['=+'] = ::Queries::Operators::BooleanAtLeast
+    def self.sql_for_field(values, db_table, db_field)
+      sql = "1=1 GROUP BY work_packages.id having '#{values[0]}' = ANY(array_agg(#{db_table}.#{db_field})) "
 
-      super_value
+      values[1..].each { |val| sql += "AND '#{val}' = ANY(array_agg(#{db_table}.#{db_field})) " }
+
+      sql
     end
   end
 end
