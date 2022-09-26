@@ -32,8 +32,9 @@ module Queries::Operators
     set_symbol '=='
 
     def self.sql_for_field(values, db_table, db_field)
-      "1=1 GROUP BY work_packages.id having array_agg(#{db_table}.#{db_field}) = '{" +
-        values.map { |val| "\"#{connection.quote_string(val)}\"" }.join(',') + '}\''
+      "1=1 GROUP BY work_packages.id having 
+        array_agg(#{db_table}.#{db_field} ORDER BY #{db_table}.#{db_field} ASC) = '{" +
+        values.sort.map { |val| "\"#{connection.quote_string(val)}\"" }.join(',') + '}\''
     end
   end
 end
