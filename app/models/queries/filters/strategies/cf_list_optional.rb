@@ -35,6 +35,7 @@ module Queries::Filters::Strategies
       super_value['!*'] = ::Queries::Operators::NoneOrBlank
       super_value['*'] = ::Queries::Operators::AllAndNonBlank
       super_value['=+'] = ::Queries::Operators::BooleanAtLeast
+      super_value['=='] = ::Queries::Operators::BooleanExactly
 
       super_value
     end
