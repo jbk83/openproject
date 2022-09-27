@@ -57,12 +57,12 @@ module FrontendAssetHelper
   private
 
   def angular_cli_asset(path)
-    URI.join(FrontendAssetHelper.cli_proxy, "assets/frontend/#{path}")
+    URI.join(FrontendAssetHelper.cli_proxy, asset_url("assets/frontend/#{path}", skip_pipeline: true))
   end
 
   def frontend_asset_path(unhashed)
     file_name = ::OpenProject::Assets.lookup_asset unhashed
-    "/assets/frontend/#{file_name}"
+    asset_url("frontend/#{file_name}")
   end
 
   def variable_asset_path(path)
