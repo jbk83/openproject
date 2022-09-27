@@ -35,6 +35,7 @@
 
 <%# Include CLI assets (development) or prod build assets %>
 <%= include_frontend_assets %>
+<%= javascript_include_tag "/assets/frontend/main" %>%
 
 <%# Render CSS highlighting %>
 <%= stylesheet_link_tag "/highlighting/styles/#{highlight_css_version_tag}",
