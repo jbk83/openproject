@@ -46,7 +46,7 @@ module FrontendAssetHelper
   # or referencing the running CLI proxy that hosts the assets in memory.
   def include_frontend_assets
     capture do
-      %w(vendor.js polyfills.js runtime.js main.js).each do |file|
+      %w(vendor.js polyfills.js runtime.js).each do |file|
         concat javascript_include_tag variable_asset_path(file), skip_pipeline: true
       end
 
