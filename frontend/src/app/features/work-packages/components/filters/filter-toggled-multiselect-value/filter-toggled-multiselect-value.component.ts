@@ -55,6 +55,8 @@ import { HalResourceService } from 'core-app/features/hal/services/hal-resource.
 export class FilterToggledMultiselectValueComponent implements OnInit, AfterViewInit {
   @Input() public shouldFocus = false;
 
+  @Input() public options:HalResource[];
+
   @Input() public filter:QueryFilterInstanceResource;
 
   @Output() public filterChanged = new EventEmitter<QueryFilterInstanceResource>();
@@ -78,8 +80,14 @@ export class FilterToggledMultiselectValueComponent implements OnInit, AfterView
 
   ngOnInit():void {
     /* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */
+    this.options = [];
     const values = (this.filter.currentSchema!.values!.allowedValues as HalResource[]);
-    this.availableOptions = this.halSorting.sort(values);
+    const filter = this.filter.values as HalResource[]
+    const ids = filter.map(v => v.id);
+
+    this.halSorting.sort(values).forEach(val => {
+      if (!ids.includes(val.id)) this.options.push(val)
+    })
   }
 
   ngAfterViewInit():void {
@@ -93,7 +101,15 @@ export class FilterToggledMultiselectValueComponent implements OnInit, AfterView
   }
 
   public setValues(val:HalResource[]|string[]|string|HalResource):void {
-    this.filter.values = _.castArray(val) as HalResource[]|string[];
+    this.options = [];
+    const values = (this.filter.currentSchema!.values!.allowedValues as HalResource[]);
+    this.filter.values = _.castArray(val) as HalResource[];
+    const ids = this.filter.values.map(v => v.id);
+
+    this.halSorting.sort(values).forEach(val => {
+      if (!ids.includes(val.id)) this.options.push(val)
+    })
+
     this.filterChanged.emit(this.filter);
     this.cdRef.detectChanges();
   }
