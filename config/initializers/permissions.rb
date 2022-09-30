@@ -355,5 +355,18 @@ Rails.application.reloader.to_prepare do
     end
 
     map.project_module :activity
+    map.project_module :work_package_fields do |wpf|
+      wpf.permission :view_estimated_time,
+                     {}
+
+      wpf.permission :view_remaining_time,
+                     {}
+      
+      wpf.permission :view_version,
+                     {}
+
+      wpf.permission :view_percentage_done,
+                     {}
+    end
   end
 end

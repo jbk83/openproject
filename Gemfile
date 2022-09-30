@@ -260,6 +260,7 @@ end
 
 group :development do
   gem 'listen', '~> 3.7.0' # Use for event-based reloaders
+  gem 'web-console'
 
   gem 'faker'
   gem 'letter_opener'

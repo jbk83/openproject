@@ -41,7 +41,26 @@ module RolesHelper
 
   def group_permissions_by_module(perms)
     enabled_module_names = ::OpenProject::AccessControl.sorted_module_names(include_disabled: false)
-    perms.group_by { |p| p.project_module.to_s }
+    permissions = perms.group_by { |p| p.project_module.to_s }
          .slice(*enabled_module_names)
+
+    add_custom_fields_permissions(permissions)
+  end
+
+  def add_custom_fields_permissions(permissions)
+    return permissions if permissions["work_package_fields"].nil?
+    custom_fields = CustomField.all
+
+    custom_fields.each do |cf|
+      perm_name = cf.name.underscore.parameterize(separator: '_')
+      custom_perm = ::OpenProject::AccessControl::PermissionCustomField.new(
+        "view_#{perm_name}".to_sym, 
+        [],
+        project_module: :work_package_fields
+      )
+      permissions["work_package_fields"].push(custom_perm)
+    end
+    puts permissions
+    permissions
   end
 end
