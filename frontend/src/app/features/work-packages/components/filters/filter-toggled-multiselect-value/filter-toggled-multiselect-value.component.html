@@ -6,7 +6,7 @@
     appendTo="body"
     class="advanced-filters--ng-select -multi-select"
     [id]="'values-' + filter.id"
-    [items]="options"
+    [items]="availableOptions"
     [classes]="{'-required-highlighting' : value.length === 0}"
     [virtualScroll]
     [closeOnSelect]="false"
