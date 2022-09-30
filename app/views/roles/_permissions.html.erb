@@ -52,7 +52,11 @@ See COPYRIGHT and LICENSE files for more details.
               <%= styled_check_box_tag 'role[permissions][]',
                                        permission.name,
                                        (role.permissions && role.permissions.include?(permission.name)) %>
-              <%= t(:"permission_#{permission.name}") %>
+              <% if permission.instance_of? ::OpenProject::AccessControl::PermissionCustomField %>
+                <%= "#{t(:"permission_view")} #{permission.field_name}" %>
+              <% else %>
+                <%= t(:"permission_#{permission.name}") %>
+              <% end %>
             </label>
           </div>
           <div class="form--field-instructions -labeled-checkbox">

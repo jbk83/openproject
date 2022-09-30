@@ -48,6 +48,7 @@ module OpenProject
       #
       # @param include_disabled [boolean] Whether to return all modules or only those that are active (not disabled by config)
       def sorted_module_names(include_disabled: true)
+        modules.push({ name: :work_package_fields, order: 0 })
         modules
           .reject { |mod| !include_disabled && disabled_project_modules.include?(mod[:name]) }
           .sort_by { |a| [-a[:order], l_or_humanize(a[:name], prefix: 'project_module_')] }
