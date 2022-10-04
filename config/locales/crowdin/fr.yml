@@ -2294,7 +2294,7 @@ fr:
   permission_view_estimated_time: "Voir le temps estimé"
   permission_view_remaining_time: "Voir le temps restant"
   permission_view_version: "Voir la version"
-  permission_view_percentage_done: "Voir le progrès"
+  permission_view_done_ratio: "Voir le progrès"
   placeholders:
     default: "-"
   project:

@@ -44,7 +44,15 @@ module API
           end
 
           def available_custom_fields
-            custom_fields || (project.all_work_package_custom_fields.to_a & type.custom_fields.to_a)
+            if User.current.admin?
+              custom_fields || (project.all_work_package_custom_fields.to_a & type.custom_fields.to_a)
+            else
+              custom_fields = WorkPackage::AvailableCustomFields.for(work_package.project, work_package.type)
+              custom_fields.select do |cf|
+                view_right = "view_#{cf.name.parameterize.underscore}".to_sym
+                User.current.allowed_to?(view_right, work_package.project)
+              end
+            end
           end
 
           def no_caching?

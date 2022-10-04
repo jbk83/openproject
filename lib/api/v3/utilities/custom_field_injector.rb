@@ -383,7 +383,6 @@ module API
                             else
                               represented.available_custom_fields.select(&:visible?)
                             end
-
             custom_field_class(custom_fields)
           end
 

@@ -373,7 +373,7 @@ Rails.application.reloader.to_prepare do
       wpf.permission :view_version,
                      {}
 
-      wpf.permission :view_percentage_done,
+      wpf.permission :view_done_ratio,
                      {}
     end
   end

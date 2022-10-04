@@ -379,12 +379,15 @@ module API
                       uncacheable: true
 
         property :estimated_time,
+                 skip_render: ->(*) do
+                  !current_user_allowed_to(:view_estimated_time, context: represented.project)
+                 end,
                  exec_context: :decorator,
                  getter: ->(*) do
                    datetime_formatter.format_duration_from_hours(represented.estimated_hours,
                                                                  allow_nil: true)
                  end,
-                 render_nil: true
+                 uncacheable: true
 
         property :derived_estimated_time,
                  exec_context: :decorator,
@@ -410,15 +413,17 @@ module API
                  getter: ->(*) do
                    datetime_formatter.format_duration_from_hours(represented.spent_hours)
                  end,
-                 if: ->(*) {
-                   view_time_entries_allowed?
-                 },
                  uncacheable: true
 
         property :done_ratio,
+                 exec_context: :decorator,
+                 skip_render: ->(*) do
+                   !current_user_allowed_to(:view_ratio_done, context: represented.project)
+                 end,
                  as: :percentageDone,
                  render_nil: true,
-                 if: ->(*) { Setting.work_package_done_ratio != 'disabled' }
+                 getter: ->(*) { represented.done_ratio },
+                 uncacheable: true
 
         date_time_property :created_at
 
@@ -470,7 +475,10 @@ module API
 
         associated_resource :version,
                             v3_path: :version,
-                            representer: ::API::V3::Versions::VersionRepresenter
+                            representer: ::API::V3::Versions::VersionRepresenter,
+                            skip_render: ->(*) do
+                              !current_user_allowed_to(:view_version, context: represented.project)
+                            end
 
         associated_resource :parent,
                             v3_path: :work_package,
@@ -610,6 +618,10 @@ module API
         end
 
         def spent_time=(value)
+          # noop
+        end
+
+        def done_ratio=(value)
           # noop
         end
 
