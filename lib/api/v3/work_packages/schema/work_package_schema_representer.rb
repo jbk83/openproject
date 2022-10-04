@@ -158,7 +158,10 @@ module API
 
           schema :estimated_time,
                  type: 'Duration',
-                 required: false
+                 required: false,
+                 show_if: ->(*) { 
+                  current_user_allowed_to(:view_estimated_time, context: represented.project)
+                 }
 
           schema :derived_estimated_time,
                  name_source: ->(*) { I18n.t('attributes.derived_estimated_hours') },
@@ -176,7 +179,10 @@ module API
           schema :percentage_done,
                  type: 'Integer',
                  name_source: :done_ratio,
-                 show_if: ->(*) { Setting.work_package_done_ratio != 'disabled' },
+                 show_if: ->(*) { 
+                  Setting.work_package_done_ratio != 'disabled' &&
+                  current_user_allowed_to(:view_done_ratio, context: represented.project)
+                 },
                  required: false
 
           schema :readonly,
@@ -275,7 +281,10 @@ module API
                                              title: version.name
                                            }
                                          },
-                                         required: false
+                                         required: false,
+                                         show_if: ->(*) {
+                                          current_user_allowed_to(:view_version, context: represented.project)
+                                        }
 
           schema_with_allowed_collection :priority,
                                          value_representer: Priorities::PriorityRepresenter,
