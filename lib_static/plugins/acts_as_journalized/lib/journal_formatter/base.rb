@@ -45,6 +45,7 @@ module JournalFormatter
     end
 
     def render(key, values, options = { no_html: false })
+      return "" if !user_allowed_to_see_activity(key) || !user_allowed_to_see_custom_field(key)
       label, old_value, value = format_details(key, values)
 
       unless options[:no_html]
@@ -112,6 +113,30 @@ module JournalFormatter
       [old_value, new_value].any? do |val|
         val.length >= LINEBREAK_ON_VALUE_LENGTH
       end
+    end
+
+    def user_allowed_to_see_activity(key)
+      key = "estimated_time" if key == "estimated_hours"
+      perm = "view_#{key}".to_sym
+      permissions_to_check = OpenProject::AccessControl
+                              .permissions
+                              .select { |m| m.project_module == :work_package_fields }
+                              .map(&:name)
+
+      return true if !permissions_to_check.include?(perm)
+
+      User.current.admin? ||
+        User.current.allowed_to?(perm, @journal.journable.project)
+    end
+
+
+    def user_allowed_to_see_custom_field(key)
+      custom_field = ::CustomField.find_by(id: key.to_s.sub('custom_fields_', '').to_i)
+
+      return false unless custom_field 
+      perm_name = "view_#{custom_field.name.underscore.parameterize(separator: '_')}"
+      User.current.admin? ||
+        User.current.allowed_to?(perm_name.to_sym, @journal.journable.project)
     end
   end
 end

@@ -70,7 +70,12 @@ module API
         property :details,
                  exec_context: :decorator,
                  getter: ->(*) { formatted_details(represented) },
-                 render_nil: true
+                 render_nil: true,
+                 skip_render: ->(*) do
+                  details = formatted_details(represented)
+                  details.length == 0 || 
+                    details.map{ |v| v[:raw] }.compact_blank.length == 0
+                 end
 
         property :version, render_nil: true
 

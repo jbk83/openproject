@@ -120,7 +120,6 @@ module JournalFormatter
     # Using regexp we are able to handle those fields with the rest.
     formatter_type = data.class.to_s.to_sym
     formatter = lookup_formatter formatter_key, formatter_type
-
     formatter_instances(formatter_type)[formatter] unless formatter.nil?
   end
 
