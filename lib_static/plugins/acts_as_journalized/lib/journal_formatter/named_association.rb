@@ -29,6 +29,7 @@
 module JournalFormatter
   class NamedAssociation < Attribute
     def render(key, values, options = { no_html: false })
+      return "" if !user_allowed_to_see_association(key.to_s.gsub(/_id$/, ''))
       label, old_value, value = format_details(key, values, options)
 
       unless options[:no_html]
@@ -86,6 +87,19 @@ module JournalFormatter
       association = @journal.journable.class.reflect_on_association(field)
 
       association&.class_name&.constantize
+    end
+
+    def user_allowed_to_see_association(key)
+      perm = "view_#{key}".to_sym
+      permissions_to_check = OpenProject::AccessControl
+                              .permissions
+                              .select { |m| m.project_module == :work_package_fields }
+                              .map(&:name)
+
+      return true if !permissions_to_check.include?(perm)
+
+      User.current.admin? ||
+        User.current.allowed_to?(perm, @journal.journable.project)
     end
   end
 end
