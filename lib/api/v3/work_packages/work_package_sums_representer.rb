@@ -10,13 +10,14 @@ module API
 
         custom_field_injector(injector_class: ::API::V3::Utilities::CustomFieldSumInjector)
 
-        def initialize(sums)
+        def initialize(sums, project)
+          @project = project
           # breaking inheritance law here
           super(sums, current_user: nil)
         end
 
-        def self.create(sums, current_user)
-          create_class(Schema::WorkPackageSumsSchema.new, current_user).new(sums)
+        def self.create(sums, current_user, project: nil)
+          create_class(Schema::WorkPackageSumsSchema.new, current_user).new(sums, project)
         end
 
         property :estimated_time,
@@ -24,7 +25,10 @@ module API
                  getter: ->(*) {
                    datetime_formatter.format_duration_from_hours(represented.estimated_hours,
                                                                  allow_nil: true)
-                 }
+                 },
+                 skip_render: ->(*) do
+                  !User.current.allowed_to?(:view_estimated_time, @project)
+                 end
 
         property :story_points,
                  render_nil: true
