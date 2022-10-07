@@ -150,7 +150,7 @@ module API
                  exec_context: :decorator,
                  getter: ->(*) {
                    if total_sums
-                     ::API::V3::WorkPackages::WorkPackageSumsRepresenter.create(total_sums, current_user)
+                     ::API::V3::WorkPackages::WorkPackageSumsRepresenter.create(total_sums, current_user, project: project)
                    end
                  },
                  render_nil: false
