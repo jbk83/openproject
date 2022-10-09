@@ -57,6 +57,7 @@ class CustomFieldsController < ApplicationController
       .call(get_custom_field_params.merge(type: permitted_params.custom_field_type))
 
     if call.success?
+      add_view_permission(permitted_params)
       flash[:notice] = t(:notice_successful_create)
       call_hook(:controller_custom_fields_new_after_save, custom_field: call.result)
       redirect_to custom_fields_path(tab: call.result.class.name)
@@ -108,6 +109,16 @@ class CustomFieldsController < ApplicationController
   end
 
   private
+
+  def add_view_permission(params)
+    Role.all.each do |role|
+      permission = "view_#{permitted_params.custom_field["name"]}"
+                    .underscore
+                    .parameterize(separator: '_')
+                    .to_sym
+      RolePermission.create(permission: permission, role: role)
+    end
+  end
 
   def perform_update(custom_field_params)
     call = ::CustomFields::UpdateService
