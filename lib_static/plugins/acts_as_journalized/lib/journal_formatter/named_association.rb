@@ -93,7 +93,7 @@ module JournalFormatter
       perm = "view_#{key}".to_sym
       permissions_to_check = OpenProject::AccessControl
                               .permissions
-                              .select { |m| m.project_module == :work_package_fields }
+                              .select { |m| m.project_module == :work_package_tracking }
                               .map(&:name)
 
       return true if !permissions_to_check.include?(perm)
