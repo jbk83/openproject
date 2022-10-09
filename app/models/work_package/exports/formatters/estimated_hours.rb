@@ -35,6 +35,7 @@ module WorkPackage::Exports
       ##
       # Takes a WorkPackage and a QueryColumn and returns the value to be exported.
       def format(work_package, **)
+        return "" if !User.current.allowed_to?(:estimated_time, work_package.project)
         estimated_hours = work_package.estimated_hours
         derived_hours = formatted_derived_hours(work_package)
 

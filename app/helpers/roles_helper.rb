@@ -48,7 +48,7 @@ module RolesHelper
   end
 
   def add_custom_fields_permissions(permissions)
-    return permissions if permissions["work_package_fields"].nil?
+    return permissions if permissions["work_package_tracking"].nil?
     custom_fields = CustomField.all
 
     custom_fields.each do |cf|
@@ -56,9 +56,9 @@ module RolesHelper
       custom_perm = ::OpenProject::AccessControl::PermissionCustomField.new(
         "view_#{perm_name}".to_sym, 
         [],
-        project_module: :work_package_fields
+        project_module: :work_package_tracking
       )
-      permissions["work_package_fields"].push(custom_perm)
+      permissions["work_package_tracking"].push(custom_perm)
     end
     puts permissions
     permissions
