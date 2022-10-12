@@ -60,7 +60,7 @@ module RolesHelper
       )
       permissions["work_package_tracking"].push(custom_perm)
     end
-    puts permissions
+
     permissions
   end
 end
