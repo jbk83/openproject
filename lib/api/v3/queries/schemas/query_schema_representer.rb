@@ -269,7 +269,19 @@ module API
           end
 
           def filters_schemas
-            filters = represented.available_filters
+            filters = represented.available_filters.select do |filter|
+              if filter.name == :estimated_hours
+                key = :view_estimated_time 
+              elsif filter.respond_to?(:custom_field)
+                key = "view_#{filter.custom_field.name.parameterize.underscore}".to_sym
+              else
+                key = "view_#{filter.name.to_s.gsub(/_id$/, '')}".to_sym
+              end
+              
+              current_user.allowed_to?(key, represented.project) ||
+              (![:estimated_hours, :remaining_hours, :done_ratio, :version_id].include?(filter.name) && !filter.respond_to?(:custom_field))
+            end
+
             QueryFilterInstanceSchemaCollectionRepresenter.new(filters,
                                                                self_link: filter_instance_schemas_href,
                                                                form_embedded:,
