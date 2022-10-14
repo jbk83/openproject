@@ -2218,6 +2218,8 @@ fr:
     text_getting_started_description: "Obtenez un aperçu rapide de la gestion de projet et de la collaboration en équipe avec OpenProject. Vous pouvez redémarrer cette vidéo à partir du menu d'aide."
     welcome: "Bienvenue sur %{app_title}"
     select_language: "Veuillez sélectionner votre langue"
+  permission_add_private_comment: "Ajouter des notes privées"
+  permission_add_public_comment: "Ajouter des notes publiques"
   permission_add_work_package_notes: "Ajouter des notes"
   permission_add_work_packages: "Ajouter des lots de travaux"
   permission_add_messages: "Poster des messages"

@@ -1,4 +1,14 @@
 <ng-container>
+  <div>
+    <label class="form--label-with-check-box">
+      <input
+        slot="input"
+        type="checkbox"
+        [ngModel]="isPublic"
+      />
+      {{ text.publicComment }}
+    </label>
+  </div>
   <div *ngIf="error" class="op-toast -error">
     <div class="op-toast--content">
       <p>
