@@ -254,6 +254,12 @@ Rails.application.reloader.to_prepare do
 
       wpt.permission :view_done_ratio,
                      {}
+
+      wpt.permission :add_private_comment,
+                     {}
+
+      wpt.permission :add_public_comment,
+                     {}
     end
 
     map.project_module :news do |news|
