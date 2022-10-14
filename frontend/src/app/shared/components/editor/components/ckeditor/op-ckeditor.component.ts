@@ -32,6 +32,7 @@ import {
 import { ToastService } from 'core-app/shared/components/toaster/toast.service';
 import { I18nService } from 'core-app/core/i18n/i18n.service';
 import { ConfigurationService } from 'core-app/core/config/configuration.service';
+import { AuthorisationService } from 'core-app/core/model-auth/model-auth.service';
 import {
   ICKEditorContext,
   ICKEditorInstance, ICKEditorWatchdog,
@@ -49,6 +50,8 @@ const manualModeLocalStorageKey = 'op-ckeditor-uses-manual-mode';
 })
 export class OpCkeditorComponent implements OnInit, OnDestroy {
   @Input() context:ICKEditorContext;
+
+  @Input() public isPublic:boolean;
 
   @Input()
   public set content(newVal:string) {
@@ -88,7 +91,16 @@ export class OpCkeditorComponent implements OnInit, OnDestroy {
 
   public text = {
     errorTitle: this.I18n.t('js.editor.ckeditor_error'),
+    publicComment: this.I18n.t('js.editor.public_comment'),
   };
+
+  public get canPrivateComment() {
+    return this.authorisation.can('work_packages', 'editWorkPackage');
+  }
+
+  public get canPublicComment() {
+    return this.authorisation.can('work_packages', 'editWorkPackage');
+  }
 
   // Codemirror instance, initialized lazily when running source mode
   public codeMirrorInstance:undefined|any;
@@ -109,6 +121,7 @@ export class OpCkeditorComponent implements OnInit, OnDestroy {
   private $element:JQuery;
 
   constructor(private readonly elementRef:ElementRef,
+    readonly authorisation:AuthorisationService,
     private readonly Notifications:ToastService,
     private readonly I18n:I18nService,
     private readonly configurationService:ConfigurationService,
