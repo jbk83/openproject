@@ -54,7 +54,11 @@ module OpenProject::Backlogs
                    type: 'Duration',
                    name_source: :remaining_hours,
                    required: false,
-                   show_if: ->(*) { represented.project && represented.project.backlogs_enabled? }
+                   show_if: ->(*) do
+                     represented.project && 
+                     represented.project.backlogs_enabled? &&
+                     User.current.allowed_to?(:view_remaining_time, represented.project)
+                   end
 
             define_method :backlogs_constraint_passed? do |attribute|
               represented.project&.backlogs_enabled? &&
