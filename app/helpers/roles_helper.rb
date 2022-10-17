@@ -32,7 +32,7 @@ module RolesHelper
     # which do not differentiate.
     contract = Roles::BaseContract.new(role, current_user)
 
-    contract.assignable_permissions
+    add_custom_fields_permissions(contract.assignable_permissions)
   end
 
   def grouped_setable_permissions(role)
@@ -41,14 +41,12 @@ module RolesHelper
 
   def group_permissions_by_module(perms)
     enabled_module_names = ::OpenProject::AccessControl.sorted_module_names(include_disabled: false)
-    permissions = perms.group_by { |p| p.project_module.to_s }
-         .slice(*enabled_module_names)
 
-    add_custom_fields_permissions(permissions)
+    perms.group_by { |p| p.project_module.to_s }
+          .slice(*enabled_module_names)
   end
 
   def add_custom_fields_permissions(permissions)
-    return permissions if permissions["work_package_tracking"].nil?
     custom_fields = CustomField.all
 
     custom_fields.each do |cf|
@@ -58,7 +56,7 @@ module RolesHelper
         [],
         project_module: :work_package_tracking
       )
-      permissions["work_package_tracking"].push(custom_perm)
+      permissions.push(custom_perm)
     end
 
     permissions
