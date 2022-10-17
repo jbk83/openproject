@@ -45,7 +45,7 @@ module JournalFormatter
     end
 
     def render(key, values, options = { no_html: false })
-      return "" if !user_allowed_to_see_activity(key) || !user_allowed_to_see_custom_field(key)
+      return "" if !user_allowed_to_see_activity(key) && !user_allowed_to_see_custom_field(key)
       label, old_value, value = format_details(key, values)
 
       unless options[:no_html]
@@ -117,11 +117,15 @@ module JournalFormatter
 
     def user_allowed_to_see_activity(key)
       key = "estimated_time" if key == "estimated_hours"
+      key = "remaining_time" if key == "remaining_hours"
       perm = "view_#{key}".to_sym
-      permissions_to_check = OpenProject::AccessControl
-                              .permissions
-                              .select { |m| m.project_module == :work_package_tracking }
-                              .map(&:name)
+      
+      permissions_to_check = %i[
+        view_estimated_time 
+        view_remaining_time 
+        view_version
+        view_done_ratio
+      ]
 
       return true if !permissions_to_check.include?(perm)
 
