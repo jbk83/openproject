@@ -37,7 +37,7 @@ See COPYRIGHT and LICENSE files for more details.
 <%= form_tag(roles_path, method: :put, id: 'permissions_form') do %>
   <%= hidden_field_tag 'permissions[0]', '', id: nil %>
 
-  <% group_permissions_by_module(@permissions).each do |mod, mod_permissions| %>
+  <% group_permissions_by_module(add_custom_fields_permissions(@permissions)).each do |mod, mod_permissions| %>
     <% module_name = mod.blank? ? "form--" + I18n.t('attributes.project') : "form--" + l_or_humanize(mod, prefix: 'project_module_').gsub(' ','_') %>
     <fieldset class="form--fieldset -collapsible" id= "<%= module_name %>">
       <legend class="form--fieldset-legend" >
@@ -102,7 +102,7 @@ See COPYRIGHT and LICENSE files for more details.
                   </td>
                   <% @roles.each do |role| %>
                     <td>
-                      <% if setable_permissions(role).include? permission %>
+                      <% if setable_permissions(role).map(&:name).include? permission.name %>
                         <%= check_box_tag "permissions[#{role.id}][]", permission.name, (role.permissions.include? permission.name), id: nil, class: "role-#{role.id}" %>
                       <% end %>
                     </td>

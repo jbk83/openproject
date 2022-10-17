@@ -340,9 +340,9 @@ module ApplicationHelper
   end
 
   def check_all_links(form_name)
-    link_to_function(t(:button_check_all), "OpenProject.helpers.checkAll('#{form_name}', true)") +
+    link_to_function(t(:button_check_all), "OpenProject.helpers.checkAll(\"#{form_name}\", true)") +
       ' | ' +
-      link_to_function(t(:button_uncheck_all), "OpenProject.helpers.checkAll('#{form_name}', false)")
+      link_to_function(t(:button_uncheck_all), "OpenProject.helpers.checkAll(\"#{form_name}\", false)")
   end
 
   def current_layout
