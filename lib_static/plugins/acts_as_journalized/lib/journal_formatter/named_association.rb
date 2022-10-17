@@ -91,10 +91,13 @@ module JournalFormatter
 
     def user_allowed_to_see_association(key)
       perm = "view_#{key}".to_sym
-      permissions_to_check = OpenProject::AccessControl
-                              .permissions
-                              .select { |m| m.project_module == :work_package_tracking }
-                              .map(&:name)
+
+      permissions_to_check = %i[
+        view_estimated_time 
+        view_remaining_time 
+        view_version
+        view_done_ratio
+      ]
 
       return true if !permissions_to_check.include?(perm)
 

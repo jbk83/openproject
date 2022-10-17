@@ -416,13 +416,11 @@ module API
                  uncacheable: true
 
         property :done_ratio,
-                 exec_context: :decorator,
                  skip_render: ->(*) do
-                   !current_user_allowed_to(:view_ratio_done, context: represented.project)
+                   !User.current.allowed_to?(:view_done_ratio, self.project)
                  end,
                  as: :percentageDone,
                  render_nil: true,
-                 getter: ->(*) { represented.done_ratio },
                  uncacheable: true
 
         date_time_property :created_at
@@ -618,10 +616,6 @@ module API
         end
 
         def spent_time=(value)
-          # noop
-        end
-
-        def done_ratio=(value)
           # noop
         end
 

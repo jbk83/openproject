@@ -46,7 +46,10 @@ module OpenProject::Backlogs
             property :remaining_time,
                      exec_context: :decorator,
                      render_nil: true,
-                     skip_render: ->(represented:, **) { !represented.backlogs_enabled? }
+                     skip_render: ->(represented:, **) do 
+                       !represented.backlogs_enabled? || 
+                       !User.current.allowed_to?(:view_remaining_time, represented.project)
+                     end
 
             # cannot use def here as it wouldn't define the method on the representer
             define_method :remaining_time do

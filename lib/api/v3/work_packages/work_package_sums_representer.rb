@@ -38,7 +38,10 @@ module API
                  getter: ->(*) {
                    datetime_formatter.format_duration_from_hours(represented.remaining_hours,
                                                                  allow_nil: true)
-                 }
+                 },
+                 skip_render: ->(*) do
+                  !User.current.allowed_to?(:view_remaining_time, @project)
+                 end
 
         property :overall_costs,
                  exec_context: :decorator,
