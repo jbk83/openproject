@@ -91,7 +91,7 @@ class RolesController < ApplicationController
   end
 
   def report
-    @roles = Role.order(Arel.sql('builtin, position'))
+    @roles = Role.where.not(type: "GlobalRole").order(Arel.sql('builtin, position'))
     @permissions = OpenProject::AccessControl.permissions.reject(&:public?)
   end
 

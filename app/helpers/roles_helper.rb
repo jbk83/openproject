@@ -32,7 +32,7 @@ module RolesHelper
     # which do not differentiate.
     contract = Roles::BaseContract.new(role, current_user)
 
-    add_custom_fields_permissions(contract.assignable_permissions)
+    add_custom_fields_permissions(contract.assignable_permissions, role.is_a?(GlobalRole))
   end
 
   def grouped_setable_permissions(role)
@@ -46,7 +46,8 @@ module RolesHelper
           .slice(*enabled_module_names)
   end
 
-  def add_custom_fields_permissions(permissions)
+  def add_custom_fields_permissions(permissions, is_global = false)
+    return permissions if is_global
     custom_fields = CustomField.all
 
     custom_fields.each do |cf|
