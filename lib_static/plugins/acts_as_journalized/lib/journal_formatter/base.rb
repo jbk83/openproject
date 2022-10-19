@@ -45,7 +45,14 @@ module JournalFormatter
     end
 
     def render(key, values, options = { no_html: false })
-      return "" if !user_allowed_to_see_activity(key) && !user_allowed_to_see_custom_field(key)
+      custom_field = ::CustomField.find_by(id: key.to_s.sub('custom_fields_', '').to_i)
+
+      if custom_field
+        return "" if !user_allowed_to_see_custom_field(custom_field)
+      else
+        return "" if !user_allowed_to_see_activity(key)
+      end
+
       label, old_value, value = format_details(key, values)
 
       unless options[:no_html]
@@ -134,9 +141,7 @@ module JournalFormatter
     end
 
 
-    def user_allowed_to_see_custom_field(key)
-      custom_field = ::CustomField.find_by(id: key.to_s.sub('custom_fields_', '').to_i)
-
+    def user_allowed_to_see_custom_field(custom_field)
       return false unless custom_field 
       perm_name = "view_#{custom_field.name.underscore.parameterize(separator: '_')}"
       User.current.admin? ||

@@ -70,7 +70,6 @@ module API
         property :details,
                  exec_context: :decorator,
                  getter: ->(*) do
-                  
                    formatted_details(represented).select { |v| v[:raw] != "" }
                  end,
                  render_nil: true
