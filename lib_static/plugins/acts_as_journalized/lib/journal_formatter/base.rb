@@ -124,7 +124,7 @@ module JournalFormatter
 
     def user_allowed_to_see_activity(key)
       key = "estimated_time" if key == "estimated_hours"
-      key = "remaining_time" if key == "remaining_hours"
+      key = "remaining_time" if key == "remaining_hours" || key == "derived_estimated_hours"
       perm = "view_#{key}".to_sym
       
       permissions_to_check = %i[
