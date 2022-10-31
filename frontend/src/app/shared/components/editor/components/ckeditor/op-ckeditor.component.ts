@@ -107,6 +107,10 @@ export class OpCkeditorComponent implements OnInit, OnDestroy {
       (this.canPrivateComment && !this.canPublicComment);
   }
 
+  public get showIsPublic() {
+    return this.context.type == 'constrained';
+  }
+
   // Codemirror instance, initialized lazily when running source mode
   public codeMirrorInstance:undefined|any;
 
