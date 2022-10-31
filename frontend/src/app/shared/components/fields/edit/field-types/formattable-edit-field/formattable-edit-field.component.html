@@ -2,6 +2,7 @@
   <div class="op-ckeditor--wrapper op-ckeditor-element">
     <op-ckeditor [context]="ckEditorContext"
                  [content]="initialContent"
+                 [isPublic]="isPublic"
                  (onContentChange)="onContentChange($event)"
                  (onInitializationFailed)="initializationError = true"
                  (onInitialized)="onCkeditorSetup($event)"

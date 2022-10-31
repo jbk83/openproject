@@ -95,11 +95,16 @@ export class OpCkeditorComponent implements OnInit, OnDestroy {
   };
 
   public get canPrivateComment() {
-    return this.authorisation.can('work_packages', 'editWorkPackage');
+    return this.authorisation.can('work_package', 'privateComment');
   }
 
   public get canPublicComment() {
-    return this.authorisation.can('work_packages', 'editWorkPackage');
+    return this.authorisation.can('work_package', 'addComment');
+  }
+
+  public get checkboxDisabled() {
+    return (!this.canPrivateComment && this.canPublicComment) || 
+      (this.canPrivateComment && !this.canPublicComment);
   }
 
   // Codemirror instance, initialized lazily when running source mode
@@ -181,6 +186,7 @@ export class OpCkeditorComponent implements OnInit, OnDestroy {
   ngOnInit() {
     try {
       this.initializeEditor();
+      this.isPublic = !this.canPrivateComment && this.canPublicComment;
     } catch (error) {
       // We will run into this error if, among others, the browser does not fully support
       // CKEditor's requirements on ES6.
@@ -189,6 +195,10 @@ export class OpCkeditorComponent implements OnInit, OnDestroy {
       this.error = error;
       this.onInitializationFailed.emit(error);
     }
+  }
+
+  onChange($event:any) {
+    this.isPublic = $event.target.checked
   }
 
   ngOnDestroy() {

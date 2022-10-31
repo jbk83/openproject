@@ -2,9 +2,11 @@
   <div>
     <label class="form--label-with-check-box">
       <input
+        [disabled]="checkboxDisabled"
         slot="input"
         type="checkbox"
         [ngModel]="isPublic"
+        (change)="onChange($event)"
       />
       {{ text.publicComment }}
     </label>
