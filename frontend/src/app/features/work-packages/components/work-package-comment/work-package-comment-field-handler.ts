@@ -40,12 +40,12 @@ export abstract class WorkPackageCommentFieldHandler extends EditFieldHandler im
 
   public abstract get workPackage():WorkPackageResource;
 
-  public reset(withText = '') {
+  public reset(withText = '', isPublic = true) {
     if (withText.length > 0) {
       withText += '\n';
     }
 
-    this.change.setValue('comment', { raw: withText });
+    this.change.setValue('comment', { raw: withText, isPublic: isPublic });
   }
 
   public get schema():IFieldSchema {
@@ -63,16 +63,16 @@ export abstract class WorkPackageCommentFieldHandler extends EditFieldHandler im
   }
 
   public get commentValue() {
-    return this.change.value<{ raw:string }>('comment');
+    return this.change.value<{ raw:string, isPublic:boolean }>('comment');
   }
 
   public handleUserCancel() {
     this.deactivate(true);
   }
 
-  public activate(withText?:string) {
+  public activate(withText?:string, isPublic?:boolean) {
     this.active = true;
-    this.reset(withText);
+    this.reset(withText, isPublic);
   }
 
   deactivate(focus:boolean):void {
