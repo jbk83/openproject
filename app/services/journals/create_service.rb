@@ -76,6 +76,7 @@ module Journals
     end
 
     def create_journal(notes, is_public)
+      is_public = true if is_public.nil?
       predecessor = aggregatable_predecessor(notes)
       log_journal_creation(predecessor)
 
