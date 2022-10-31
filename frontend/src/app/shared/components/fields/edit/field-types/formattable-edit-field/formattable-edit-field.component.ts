@@ -74,7 +74,6 @@ export class FormattableEditFieldComponent extends EditFieldComponent implements
 
   ngOnInit():void {
     super.ngOnInit();
-
     this.handler.registerOnSubmit(() => this.getCurrentValue());
     this.text = {
       attachmentLabel: this.I18n.t('js.label_formattable_attachment_hint'),
@@ -105,6 +104,7 @@ export class FormattableEditFieldComponent extends EditFieldComponent implements
     return this.editor
       .getTransformedContent()
       .then((val) => {
+        this.isPublic = this.editor.isPublic;
         this.rawValue = val;
       });
   }
@@ -150,8 +150,19 @@ export class FormattableEditFieldComponent extends EditFieldComponent implements
     return '';
   }
 
+  public get isPublic():boolean {
+    if (this.value && Object.keys(this.value).includes("isPublic")) {
+      return this.value.isPublic;
+    }
+    return true;
+  }
+
   public set rawValue(val:string) {
-    this.value = { raw: val };
+    this.value['raw'] = val;
+  }
+
+  public set isPublic(val:boolean) {
+    this.value['isPublic'] = val;
   }
 
   public isEmpty():boolean {

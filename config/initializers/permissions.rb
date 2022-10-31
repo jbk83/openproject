@@ -183,6 +183,10 @@ Rails.application.reloader.to_prepare do
                      require: :loggedin,
                      dependencies: :view_work_packages
 
+      wpt.permission :add_private_comment,
+                     {},
+                     dependencies: :view_work_packages
+
       # WorkPackage categories
       wpt.permission :manage_categories,
                      {
@@ -259,12 +263,6 @@ Rails.application.reloader.to_prepare do
                      {}
 
       wpt.permission :view_done_ratio,
-                     {}
-
-      wpt.permission :add_private_comment,
-                     {}
-
-      wpt.permission :add_public_comment,
                      {}
     end
 

@@ -101,8 +101,7 @@ export class WorkPackageCommentComponent extends WorkPackageCommentFieldHandler 
 
   public ngOnInit():void {
     super.ngOnInit();
-
-    this.canAddComment = !!this.workPackage.addComment;
+    this.canAddComment = !!this.workPackage.addComment || !!this.workPackage.privateComment;
     this.showAbove = this.configurationService.commentsSortedInDescendingOrder();
 
     this.commentService.draft$
@@ -162,7 +161,6 @@ export class WorkPackageCommentComponent extends WorkPackageCommentFieldHandler 
     if (this.inFlight || !this.rawComment) {
       return Promise.resolve();
     }
-
     this.inFlight = true;
     await this.onSubmit();
     const indicator = this.loadingIndicator.wpDetails;

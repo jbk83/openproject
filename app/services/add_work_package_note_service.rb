@@ -40,10 +40,10 @@ class AddWorkPackageNoteService
     self.contract_class = WorkPackages::CreateNoteContract
   end
 
-  def call(notes, send_notifications: true)
+  def call(notes, is_public: true, send_notifications: true)
     Journal::NotificationConfiguration.with send_notifications do
-      work_package.add_journal(user, notes)
-
+      work_package.add_journal(user, notes, is_public)
+      
       success, errors = validate_and_yield(work_package, user) do
         work_package.save_journals
       end
