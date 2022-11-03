@@ -111,12 +111,20 @@ class WorkPackages::BulkController < ApplicationController
   def attributes_for_update
     return {} unless params.has_key? :work_package
 
-    permitted_params
+    p = permitted_params
       .update_work_package
       .tap { |attributes| attributes[:custom_field_values]&.reject! { |_k, v| v.blank? } }
       .compact_blank
       .transform_values { |v| v == 'none' ? '' : v }
       .to_h
+
+    if p[:journal_notes].present?
+      p[:journal_is_public] = params[:is_public].present?
+    else
+      p = p.except(:is_public) if params[:is_public].present?
+    end
+
+    p
   end
 
   def user

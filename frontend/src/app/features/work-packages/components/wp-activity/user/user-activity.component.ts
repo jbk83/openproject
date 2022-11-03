@@ -133,7 +133,7 @@ export class UserActivityComponent extends WorkPackageCommentFieldHandler implem
     this.$element = jQuery(this.elementRef.nativeElement);
     this.reset();
     this.userCanEdit = !!this.activity.update;
-    this.userCanQuote = !!this.workPackage.addComment;
+    this.userCanQuote = !!this.workPackage.addComment || !!this.workPackage.privateComment;
 
     this.$element.bind('focusin', this.focus.bind(this));
     this.$element.bind('focusout', this.blur.bind(this));

@@ -27,7 +27,7 @@
 //++
 
 import {
-  Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild,
+  Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild, AfterViewInit,
 } from '@angular/core';
 import { ToastService } from 'core-app/shared/components/toaster/toast.service';
 import { I18nService } from 'core-app/core/i18n/i18n.service';
@@ -48,7 +48,7 @@ const manualModeLocalStorageKey = 'op-ckeditor-uses-manual-mode';
   templateUrl: './op-ckeditor.html',
   styleUrls: ['./op-ckeditor.sass'],
 })
-export class OpCkeditorComponent implements OnInit, OnDestroy {
+export class OpCkeditorComponent implements OnInit, OnDestroy, AfterViewInit {
   @Input() context:ICKEditorContext;
 
   @Input() public isPublic:boolean;
@@ -85,6 +85,8 @@ export class OpCkeditorComponent implements OnInit, OnDestroy {
 
   public allowManualMode = false;
 
+  public isDisabled:boolean = true;
+
   public manualMode = false;
 
   private _content = '';
@@ -94,21 +96,9 @@ export class OpCkeditorComponent implements OnInit, OnDestroy {
     publicComment: this.I18n.t('js.editor.public_comment'),
   };
 
-  public get canPrivateComment() {
-    return this.authorisation.can('work_package', 'privateComment');
-  }
-
-  public get canPublicComment() {
-    return this.authorisation.can('work_package', 'addComment');
-  }
-
-  public get checkboxDisabled() {
-    return (!this.canPrivateComment && this.canPublicComment) || 
-      (this.canPrivateComment && !this.canPublicComment);
-  }
-
   public get showIsPublic() {
-    return this.context.type == 'constrained';
+    const pathname = document.location.pathname;
+    return this.context.type == 'constrained' || pathname.split('/').includes('bulk');
   }
 
   // Codemirror instance, initialized lazily when running source mode
@@ -190,7 +180,10 @@ export class OpCkeditorComponent implements OnInit, OnDestroy {
   ngOnInit() {
     try {
       this.initializeEditor();
-      this.isPublic = !this.canPrivateComment && this.canPublicComment;
+      const canPrivateComment = this.authorisation.can('work_package', 'privateComment');
+      const canPublicComment = this.authorisation.can('work_package', 'addComment');
+      this.isPublic = !canPrivateComment && canPublicComment;
+      this.isDisabled = false;
     } catch (error) {
       // We will run into this error if, among others, the browser does not fully support
       // CKEditor's requirements on ES6.
@@ -203,6 +196,14 @@ export class OpCkeditorComponent implements OnInit, OnDestroy {
 
   onChange($event:any) {
     this.isPublic = $event.target.checked
+  }
+
+  ngAfterViewInit() {
+    setTimeout(() => {
+      const canPrivateComment = this.authorisation.can('work_package', 'privateComment');
+      const canPublicComment = this.authorisation.can('work_package', 'addComment');
+      this.isDisabled = (!canPrivateComment && canPublicComment) || (canPrivateComment && !canPublicComment);
+    })
   }
 
   ngOnDestroy() {
