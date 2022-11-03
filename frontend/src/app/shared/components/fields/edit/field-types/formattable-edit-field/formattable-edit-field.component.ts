@@ -158,7 +158,7 @@ export class FormattableEditFieldComponent extends EditFieldComponent implements
   }
 
   public set rawValue(val:string) {
-    this.value['raw'] = val;
+    this.value = { raw: val, isPublic: this.isPublic };
   }
 
   public set isPublic(val:boolean) {
