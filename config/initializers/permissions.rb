@@ -176,8 +176,12 @@ Rails.application.reloader.to_prepare do
                      dependencies: :view_work_packages
 
       wpt.permission :add_private_comment,
-                     {},
-                     dependencies: :view_work_packages
+                    {
+                      # FIXME: Although the endpoint is removed, the code checking whether a user
+                      # is eligible to add work packages through the API still seems to rely on this.
+                      journals: [:new]
+                    },
+                    dependencies: :view_work_packages
 
       # WorkPackage categories
       wpt.permission :manage_categories,

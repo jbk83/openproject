@@ -48,11 +48,17 @@ export class CommentService {
   }
 
   public createComment(workPackage:WorkPackageResource, comment:{ raw:string, isPublic:boolean }) {
-    return workPackage.addComment(
+    if (!!workPackage.addComment) {
+      return workPackage.addComment(
+        { comment },
+        { 'Content-Type': 'application/json; charset=UTF-8' },
+      ).catch((error:any) => this.errorAndReject(error, workPackage));
+    }
+
+    return workPackage.privateComment(
       { comment },
       { 'Content-Type': 'application/json; charset=UTF-8' },
-    )
-      .catch((error:any) => this.errorAndReject(error, workPackage));
+    ).catch((error:any) => this.errorAndReject(error, workPackage));
   }
 
   public updateComment(activity:HalResource, comment:string, isPublic: boolean) {

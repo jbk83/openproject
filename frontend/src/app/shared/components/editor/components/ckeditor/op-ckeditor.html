@@ -2,7 +2,8 @@
   <div *ngIf="showIsPublic">
     <label class="form--label-with-check-box">
       <input
-        [disabled]="checkboxDisabled"
+        name="work_package[is_public]"
+        [disabled]="isDisabled"
         slot="input"
         type="checkbox"
         [ngModel]="isPublic"
