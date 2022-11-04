@@ -51,7 +51,9 @@ const manualModeLocalStorageKey = 'op-ckeditor-uses-manual-mode';
 export class OpCkeditorComponent implements OnInit, OnDestroy, AfterViewInit {
   @Input() context:ICKEditorContext;
 
-  @Input() public isPublic:boolean;
+  @Input() public isPrivate:boolean;
+
+  @Input() public fieldName:string;
 
   @Input()
   public set content(newVal:string) {
@@ -93,12 +95,11 @@ export class OpCkeditorComponent implements OnInit, OnDestroy, AfterViewInit {
 
   public text = {
     errorTitle: this.I18n.t('js.editor.ckeditor_error'),
-    publicComment: this.I18n.t('js.editor.public_comment'),
+    privateNote: this.I18n.t('js.editor.private_note'),
   };
 
-  public get showIsPublic() {
-    const pathname = document.location.pathname;
-    return this.context.type == 'constrained' || pathname.split('/').includes('bulk');
+  public get showIsPrivate() {
+    return this.fieldName == 'comment' || this.fieldName == 'work_package_journal_notes';
   }
 
   // Codemirror instance, initialized lazily when running source mode
@@ -182,7 +183,7 @@ export class OpCkeditorComponent implements OnInit, OnDestroy, AfterViewInit {
       this.initializeEditor();
       const canPrivateComment = this.authorisation.can('work_package', 'privateComment');
       const canPublicComment = this.authorisation.can('work_package', 'addComment');
-      this.isPublic = !canPrivateComment && canPublicComment;
+      this.isPrivate = (canPrivateComment && !canPublicComment);
       this.isDisabled = false;
     } catch (error) {
       // We will run into this error if, among others, the browser does not fully support
@@ -195,7 +196,7 @@ export class OpCkeditorComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   onChange($event:any) {
-    this.isPublic = $event.target.checked
+    this.isPrivate = $event.target.checked
   }
 
   ngAfterViewInit() {
