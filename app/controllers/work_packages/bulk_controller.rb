@@ -119,9 +119,9 @@ class WorkPackages::BulkController < ApplicationController
       .to_h
 
     if p[:journal_notes].present?
-      p[:journal_is_public] = params[:is_public].present?
+      p[:journal_is_public] = params[:work_package][:is_private].nil?
     else
-      p = p.except(:is_public) if params[:is_public].present?
+      p = p.except(:is_private) if params[:work_package][:is_private].present?
     end
 
     p

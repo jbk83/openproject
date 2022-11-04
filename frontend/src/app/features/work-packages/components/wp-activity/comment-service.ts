@@ -50,7 +50,7 @@ export class CommentService {
   ) {
   }
 
-  public createComment(workPackage:WorkPackageResource, comment:{ raw:string, isPublic:boolean }) {
+  public createComment(workPackage:WorkPackageResource, comment:{ raw:string, isPrivate:boolean }) {
     if (!!workPackage.addComment) {
       return workPackage.addComment(
         { comment },
@@ -64,17 +64,17 @@ export class CommentService {
     ).catch((error:any) => this.errorAndReject(error, workPackage));
   }
 
-  public updateComment(activity:HalResource, comment:string, isPublic: boolean) {
+  public updateComment(activity:HalResource, comment:string, isPrivate: boolean) {
     const options = {
       ajax: {
         method: 'PATCH',
-        data: JSON.stringify({ comment, isPublic }),
+        data: JSON.stringify({ comment, isPrivate }),
         contentType: 'application/json; charset=utf-8',
       },
     };
 
     return activity.update(
-      { comment, isPublic },
+      { comment, isPrivate },
       { 'Content-Type': 'application/json; charset=UTF-8' },
     ).then((activity:HalResource) => {
       this.toastService.addSuccess(

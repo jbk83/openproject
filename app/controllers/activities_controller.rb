@@ -46,7 +46,7 @@ class ActivitiesController < ApplicationController
                                         scope: activity_scope)
 
     events = @activity.events(@date_from.to_datetime, @date_to.to_datetime)
-
+    
     respond_to do |format|
       format.html do
         respond_html(events)

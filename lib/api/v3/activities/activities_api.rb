@@ -55,7 +55,7 @@ module API
                                                                params_modifier: ->(*) {
                                                                  { 
                                                                   notes: declared_params[:comment], 
-                                                                  is_public: params[:isPublic] 
+                                                                  is_public: !params[:isPrivate] 
                                                                  }
                                                                })
                                                           .mount
