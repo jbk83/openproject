@@ -56,6 +56,8 @@ export const ckeditorAugmentedTextareaSelector = 'ckeditor-augmented-textarea';
 export class CkeditorAugmentedTextareaComponent extends UntilDestroyedMixin implements OnInit {
   public textareaSelector:string;
 
+  public fieldName:string;
+
   public previewContext:string;
 
   // Which template to include
@@ -99,12 +101,13 @@ export class CkeditorAugmentedTextareaComponent extends UntilDestroyedMixin impl
 
   ngOnInit() {
     this.$element = jQuery(this.elementRef.nativeElement);
-
     // Parse the attribute explicitly since this is likely a bootstrapped element
     this.textareaSelector = this.$element.attr('textarea-selector')!;
     this.previewContext = this.$element.attr('preview-context')!;
     this.macros = this.$element.attr('macros') !== 'false';
     const editorType = (this.$element.attr('editor-type') || 'full') as ICKEditorType;
+
+    this.fieldName = this.textareaSelector.substring(1);
 
     // Parse the resource if any exists
     const source = this.$element.data('resource');

@@ -57,7 +57,7 @@ module API
                        .new(user: current_user,
                             work_package: @work_package)
                        .call(params[:comment][:raw],
-                             is_public: params[:comment][:isPublic],
+                             is_public: !params[:comment][:isPrivate],
                              send_notifications: !(params.has_key?(:notify) && params[:notify] == 'false'))
 
             if result.success?

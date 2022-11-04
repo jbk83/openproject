@@ -1,15 +1,15 @@
 <ng-container>
-  <div *ngIf="showIsPublic">
+  <div *ngIf="showIsPrivate">
     <label class="form--label-with-check-box">
       <input
-        name="work_package[is_public]"
+        name="work_package[is_private]"
         [disabled]="isDisabled"
         slot="input"
         type="checkbox"
-        [ngModel]="isPublic"
+        [ngModel]="isPrivate"
         (change)="onChange($event)"
       />
-      {{ text.publicComment }}
+      {{ text.privateNote }}
     </label>
   </div>
   <div *ngIf="error" class="op-toast -error">

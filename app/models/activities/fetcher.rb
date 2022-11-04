@@ -54,7 +54,9 @@ module Activities
                 p.activity_provider_options[:permission]
               end.compact
 
-              permissions.all? { |p| @user.allowed_to?(p, @project) }
+              permissions.all? { |p| 
+                @user.allowed_to?(p, @project) 
+              }
             end
           end
         else

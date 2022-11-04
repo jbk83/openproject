@@ -199,7 +199,7 @@ export class UserActivityComponent extends WorkPackageCommentFieldHandler implem
     return this.commentService.updateComment(
         this.activity, 
         this.rawComment || '', 
-        this.commentValue.isPublic
+        this.commentValue.isPrivate
       ).then((newActivity:HalResource) => {
         this.activity = newActivity;
         this.updateCommentText();
