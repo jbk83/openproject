@@ -133,6 +133,7 @@ class Activities::BaseActivityProvider
     query = extend_event_query(query)
     query = filter_for_event_datetime(query, from, to)
     query = restrict_user(query, options)
+    query = restrict_private_comment(query, user)
     restrict_projects(query, user, options)
   end
 
@@ -191,6 +192,19 @@ class Activities::BaseActivityProvider
 
   def join_with_projects_table(query)
     query.join(projects_table).on(projects_table[:id].eq(projects_reference_table['project_id']))
+  end
+
+  def restrict_private_comment(query, user)
+    query = query.where(
+      journals_table[:is_public].eq(true).or(
+      projects_table[:id].in(
+        Project.allowed_to(user, :add_private_comment).select(:id).arel
+      ).and(
+        journals_table[:is_public].eq(false)
+      )
+    ))
+
+    query
   end
 
   def restrict_user(query, options)
