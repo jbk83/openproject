@@ -32,6 +32,8 @@ module WorkPackages
       private
 
       def alter_work_package(work_package, attributes)
+        attributes = filter_attributes(work_package, attributes)
+
         WorkPackages::UpdateService
           .new(user:, model: work_package)
           .call(**attributes.symbolize_keys)
@@ -41,6 +43,34 @@ module WorkPackages
         call_hook(:controller_work_packages_bulk_edit_before_save,
                   params:,
                   work_package:)
+      end
+
+      def filter_attributes(work_package, attributes)
+        project = work_package.project
+
+        if attributes["version_id"] && !user.allowed_to?(:view_version, project)
+          attributes = attributes.except("version_id")  
+        end
+
+        if attributes["done_ratio"] && !user.allowed_to?(:view_done_ratio, project)
+          attributes = attributes.except("done_ratio")  
+        end
+
+        if attributes["custom_field_values"]
+          new_attributes = {}
+          attributes["custom_field_values"].each do |k, v|
+            permission = "view_#{CustomField.find(k).name}"
+                          .underscore
+                          .parameterize(separator: '_')
+                          .to_sym
+
+            new_attributes[k] = v if user.allowed_to?(permission, project)
+          end
+
+          attributes["custom_field_values"] = new_attributes
+        end
+
+        attributes
       end
     end
   end

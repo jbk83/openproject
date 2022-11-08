@@ -85,7 +85,15 @@ class WorkPackages::BulkController < ApplicationController
 
   def setup_edit
     @available_statuses = @projects.map { |p| Workflow.available_statuses(p) }.inject(&:&)
-    @custom_fields = @projects.map(&:all_work_package_custom_fields).inject(&:&)
+    custom_fields = @projects.map(&:all_work_package_custom_fields).inject(&:&)
+
+    @custom_fields = custom_fields.filter do |cf|
+      permission = "view_#{cf.name}".underscore.parameterize(separator: '_').to_sym
+      @projects.any? { |p| current_user.allowed_to?(permission, p) }
+    end
+
+    @show_done_ratio = @projects.any? { |p| current_user.allowed_to?(:view_done_ratio, p) }
+
     @assignables = @responsibles = possible_assignees
     @types = @projects.map(&:types).inject(&:&)
   end
