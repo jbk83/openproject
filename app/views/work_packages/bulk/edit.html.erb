@@ -102,7 +102,13 @@ See COPYRIGHT and LICENSE files for more details.
                                     options_from_collection_for_select(@project.categories, :id, :name)) %>
               </div>
             </div>
+<<<<<<< HEAD
             <% #TODO: allow editing versions when multiple projects %>
+=======
+          <% end %>
+          <% #TODO: allow editing versions when multiple projects %>
+          <% if @project && current_user.allowed_to?(:view_version, @project) %>
+>>>>>>> a6c297aed1 (1179 hide fields in bulk edit)
             <div class="form--field">
               <%= styled_label_tag :work_package_version_id, WorkPackage.human_attribute_name(:version) %>
               <div class="form--field-container">
@@ -160,7 +166,7 @@ See COPYRIGHT and LICENSE files for more details.
               <%= styled_text_field_tag 'work_package[due_date]', '', size: 10, class: '-augmented-datepicker' %>
             </div>
           </div>
-          <% if WorkPackage.use_field_for_done_ratio? %>
+          <% if WorkPackage.use_field_for_done_ratio? && @show_done_ratio %>
             <div class="form--field">
               <%= styled_label_tag :work_package_done_ratio, WorkPackage.human_attribute_name(:done_ratio) %>
               <div class="form--field-container">
