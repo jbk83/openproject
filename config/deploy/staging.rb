@@ -22,7 +22,7 @@ server 'ip_staging', user: 'deploy', roles: %w(app db web)
 # role :db,  %w{deploy@example.com}
 
 set :stage, :staging
-set :branch, ENV['REVISION'] || ENV['BRANCH_NAME'] || :develop
+set :branch, ENV['REVISION'] || ENV['BRANCH_NAME'] || :dev
 
 # Configuration
 # =============

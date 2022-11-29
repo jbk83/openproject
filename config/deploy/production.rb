@@ -31,7 +31,7 @@ server '46.137.2.139', user: 'deploy', roles: %w(app db web)
 # Feel free to add new variables to customise your setup.
 
 set :stage, :production
-set :branch, ENV['REVISION'] || ENV['BRANCH_NAME'] || :master
+set :branch, ENV['REVISION'] || ENV['BRANCH_NAME'] || :dev
 
 
 # Custom SSH Options
