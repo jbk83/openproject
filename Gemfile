@@ -204,6 +204,12 @@ gem 'validate_url'
 # Appsignal integration
 gem "appsignal", "~> 3.0", require: false
 
+# Deployment
+gem 'capistrano',                 '3.11.2'
+gem 'capistrano-rails',           '1.4.0'
+gem 'capistrano-rbenv',           '2.1.4 '
+gem 'capistrano-passenger',       '0.2.0'
+
 group :test do
   gem 'launchy', '~> 2.5.0'
   gem 'rack-test', '~> 2.0.0'
