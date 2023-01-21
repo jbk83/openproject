@@ -588,7 +588,7 @@ ru:
           message: 'Есть новые уведомления.'
           link_text: 'Нажмите здесь для их загрузки'
       menu:
-        accountable: 'Проверяющий'
+        accountable: 'Подотчетный'
         by_project: 'Непрочитано по проекту'
         by_reason: 'Причина'
         inbox: 'Входящие'
