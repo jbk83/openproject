@@ -82,7 +82,6 @@ OpenProject::Application.configure do
 
   # Set email preview locations to rspec
   config.action_mailer.preview_path = Rails.root.join('spec/mailers/previews')
-  config.web_console.permissions = '192.168.0.0/16'
 
   config.hosts << 'bs-local.com' if ENV['OPENPROJECT_DISABLE_DEV_ASSET_PROXY'].present?
 
