@@ -1,2 +1,0 @@
-(self.webpackChunkopenproject_frontend=self.webpackChunkopenproject_frontend||[]).push([["src_vendor_ckeditor_translations_ms_js"],{20624:()=>{!function(e){const n=e.ms=e.ms||{};n.dictionary=Object.assign(n.dictionary||{},{"%0 of %1":"",Cancel:"","Cannot upload file:":"Gagal memuat naik fail","Remove color":"","Restore default":"",Save:"","Show more items":""}),n.getPluralForm=function(o){return 0}}(window.CKEDITOR_TRANSLATIONS||(window.CKEDITOR_TRANSLATIONS={}))}}]);
-//# sourceMappingURL=src_vendor_ckeditor_translations_ms_js.55d90858d45eaadf7065.js.map
