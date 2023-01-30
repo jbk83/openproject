@@ -79,6 +79,7 @@ npm-debug.log*
 /files/*
 /log/*.log*
 /log/mongrel_debug
+/public/assets
 /public/dispatch.*
 /public/plugin_assets
 /public/javascripts
