@@ -113,10 +113,19 @@ module Redmine
               existing_cvs = custom_values.select { |v| v.custom_field_id == custom_field.id }
 
               if existing_cvs.empty?
-                new_value = custom_values.build(customized: self,
-                                                custom_field:,
-                                                value: custom_field.default_value)
-                existing_cvs.push new_value
+                if custom_field.default_value.is_a?(Array)
+                  custom_field.default_value.each do | cfv |
+                    new_value = custom_values.build(customized: self,
+                                                    custom_field:,
+                                                    value: cfv)
+                    existing_cvs.push new_value
+                  end
+                else 
+                  new_value = custom_values.build(customized: self,
+                                                  custom_field:,
+                                                  value: custom_field.default_value)
+                  existing_cvs.push new_value
+                end
               end
 
               existing_cvs

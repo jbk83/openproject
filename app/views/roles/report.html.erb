@@ -98,7 +98,11 @@ See COPYRIGHT and LICENSE files for more details.
                           "OpenProject.helpers.toggleCheckboxesBySelector('.permission-#{permission.name} input')",
                           class: 'no-decoration-on-hover',
                           title: "#{t(:button_check_all)}/#{t(:button_uncheck_all)}") %>
-                    <%= l_or_humanize(permission.name, prefix: 'permission_') %>
+                    <% if permission.instance_of? ::OpenProject::AccessControl::PermissionCustomField %>
+                      <%= "#{t(:"permission_view")} #{permission.field_name}" %>
+                    <% else %>
+                      <%= l_or_humanize(permission.name, prefix: 'permission_') %>
+                    <% end %>
                   </td>
                   <% @roles.each do |role| %>
                     <td>

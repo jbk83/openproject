@@ -183,7 +183,8 @@ export class OpCkeditorComponent implements OnInit, OnDestroy, AfterViewInit {
       this.initializeEditor();
       const canPrivateComment = this.authorisation.can('work_package', 'privateComment');
       const canPublicComment = this.authorisation.can('work_package', 'addComment');
-      this.isPrivate = (canPrivateComment && !canPublicComment);
+      const parentIsPrivate = this.$element.parents('.op-user-activity').hasClass('op-user-activity--private');
+      this.isPrivate = (canPrivateComment && !canPublicComment) || parentIsPrivate;
       this.isDisabled = false;
     } catch (error) {
       // We will run into this error if, among others, the browser does not fully support
