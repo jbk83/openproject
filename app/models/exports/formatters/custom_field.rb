@@ -9,7 +9,11 @@ module Exports
       # Takes a WorkPackage and an attribute and returns the value to be exported.
       def retrieve_value(object)
         custom_field = find_custom_field(object)
+
         return '' if custom_field.nil?
+
+        view_right = "view_#{custom_field.parameterize.underscore}".to_sym
+        return '' if !User.current.allowed_to?(view_right, object.project)
 
         format_for_export(object, custom_field)
       end

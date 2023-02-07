@@ -22,6 +22,10 @@ module Exports
       def format(object, **options)
         value = retrieve_value(object)
 
+        if check_permission.include?(attribute) && !User.current.allowed_to?("view_#{attribute}".to_sym, object.project)
+          return ''
+        end
+
         case value
         when Date
           format_date value
@@ -45,6 +49,10 @@ module Exports
       end
 
       protected
+
+      def check_permission
+        [:version, :done_ratio, :remaining_time, :remaining_time]
+      end
 
       # By default, use try as a non-destructive accessor
       # in case that attribute is not available for the cell

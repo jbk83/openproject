@@ -2366,6 +2366,7 @@ en:
   permission_select_custom_fields: "Select custom fields"
   permission_select_project_modules: "Select project modules"
   permission_manage_types: "Select types"
+  permission_view: "View "
   permission_view_changesets: "View repository revisions in OpenProject"
   permission_view_commit_author_statistics: "View commit author statistics"
   permission_view_work_package_watchers: "View watchers list"
@@ -2379,6 +2380,10 @@ en:
   permission_view_wiki_pages: "View wiki"
   permission_work_package_assigned: "Become assignee/responsible"
   permission_work_package_assigned_explanation: "Work packages can be assigned to users and groups in possession of this role in the respective project"
+  permission_view_estimated_time: "View estimated time"
+  permission_view_remaining_time: "View remaining time"
+  permission_view_version: "View version"
+  permission_view_done_ratio: "View progress"
 
   placeholders:
     default: "-"

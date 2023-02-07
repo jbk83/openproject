@@ -97,6 +97,15 @@ class Notifications::CreateFromModelService
       mail_alert_sent: strategy.supports_mail? ? false : nil
     }
 
+    #check right for private comment
+    if model.instance_of?(Journal) && !model.is_public
+      project = model.journable.project
+      user = User.find(recipient_id)
+      user_not_authorized_for_private = !user.allowed_to?(:add_private_comment, project)
+      
+      return ServiceResult.new(success: true) if user_not_authorized_for_private
+    end
+
     Notifications::CreateService
       .new(user: user_with_fallback)
       .call(notification_attributes)

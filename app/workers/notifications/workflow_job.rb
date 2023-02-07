@@ -61,11 +61,14 @@ class Notifications::WorkflowJob < ApplicationJob
 
   state :create_notifications,
         to: :send_mails do |resource, send_notification|
-    mentioned, delayed = Notifications::CreateFromModelService
-                         .new(resource)
-                         .call(send_notification)
-                         .all_results
-                         .partition(&:reason_mentioned?)
+
+    results = Notifications::CreateFromModelService
+              .new(resource)
+              .call(send_notification)
+              .all_results
+
+    return unless results.length == 0
+    mentioned, delayed = results.partition(&:reason_mentioned?)
 
     mentioned
       .select { |n| n.mail_alert_sent == false }
