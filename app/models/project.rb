@@ -396,7 +396,13 @@ class Project < ApplicationRecord
       begin
         names = enabled_modules.loaded? ? enabled_module_names : enabled_modules.pluck(:name)
 
-        OpenProject::AccessControl.modules_permissions(names).map(&:name)
+        base_permissions = OpenProject::AccessControl.modules_permissions(names).map(&:name)
+        CustomField.where(type: "WorkPackageCustomField").each do |cf|
+          perm_name = "view_#{cf.name.underscore.parameterize(separator: '_')}".to_sym
+          base_permissions.push(perm_name)
+        end
+
+        base_permissions
       end
   end
 

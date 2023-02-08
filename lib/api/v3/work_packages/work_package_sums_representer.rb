@@ -12,6 +12,7 @@ module API
 
         def initialize(sums, project)
           @project = project
+          ::API::V3::Utilities::CustomFieldInjector::RepresenterClass.set_project(project)
           # breaking inheritance law here
           super(sums, current_user: nil)
         end

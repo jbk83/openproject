@@ -8,7 +8,7 @@ class CreateViewPermissions < ActiveRecord::Migration[7.0]
       RolePermission.create(permission: :view_version, role: role)
       RolePermission.create(permission: :view_done_ratio, role: role)
 
-      CustomField.all.each do |cf|
+      CustomField.where(type: "WorkPackageCustomField").each do |cf|
         p = cf.name.underscore.parameterize(separator: '_')
         RolePermission.create(permission: "view_#{p}", role: role)
       end

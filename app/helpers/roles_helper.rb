@@ -48,7 +48,7 @@ module RolesHelper
 
   def add_custom_fields_permissions(permissions, is_global = false)
     return permissions if is_global
-    custom_fields = CustomField.all
+    custom_fields = CustomField.where(type: "WorkPackageCustomField")
 
     custom_fields.each do |cf|
       perm_name = cf.name.underscore.parameterize(separator: '_')

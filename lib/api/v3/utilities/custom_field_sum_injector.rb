@@ -40,7 +40,11 @@ module API
                         name_source: ->(*) { custom_field.name },
                         required: false,
                         writable: false,
-                        show_if: ->(*) { custom_field.summable? }
+                        show_if: ->(*) do
+                          view_right = "view_#{custom_field.name.parameterize.underscore}".to_sym
+                          project = ::API::V3::Utilities::CustomFieldInjector::RepresenterClass.get_project
+                          custom_field.summable? && User.current.allowed_to?(view_right, project)
+                        end
         end
 
         def inject_property_value(custom_field)

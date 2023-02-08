@@ -71,6 +71,12 @@ class CustomField < ApplicationRecord
 
   before_validation :check_searchability
   after_destroy :destroy_help_text
+  after_create :update_permission_name
+
+  def update_permission_name
+    self.permission_name = self.name.underscore.parameterize(separator: '_')
+    self.save
+  end
 
   # make sure int, float, date, and bool are not searchable
   def check_searchability

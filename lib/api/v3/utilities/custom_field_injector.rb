@@ -368,6 +368,14 @@ module API
             end
           end
 
+          def self.set_project(project)
+            @project = project
+          end
+
+          def self.get_project
+            @project
+          end
+
           def custom_field_injector(config)
             @custom_field_injector_config = config.reverse_merge custom_field_injector_config
           end
