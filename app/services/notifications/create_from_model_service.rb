@@ -97,10 +97,13 @@ class Notifications::CreateFromModelService
       mail_alert_sent: strategy.supports_mail? ? false : nil
     }
 
+    user = User.find(recipient_id)
+
+    #check view fields rights
+    return ServiceResult.new(success: true) if do_not_notify_recipient(user, project, journal.details)
+
     #check right for private comment
     if model.instance_of?(Journal) && !model.is_public
-      project = model.journable.project
-      user = User.find(recipient_id)
       user_not_authorized_for_private = !user.allowed_to?(:add_private_comment, project)
       
       return ServiceResult.new(success: true) if user_not_authorized_for_private
@@ -109,6 +112,34 @@ class Notifications::CreateFromModelService
     Notifications::CreateService
       .new(user: user_with_fallback)
       .call(notification_attributes)
+  end
+
+  def do_not_notify_recipient(recipient, project, changed_fields)
+    result = []
+
+    cf_list = CustomField.where(type: "WorkPackageCustomField").map { |cf| "custom_fields_#{cf.id}" }
+    permission_list = ["version_id", "done_ratio", "remaining_hours", "estimated_hours"] + cf_list
+
+    return false if changed_fields.keys.any? { |key| !permission_list.include?(key) }
+
+    changed_fields.keys.each do |key|
+      if key == "version_id"
+        permission = :view_version
+      elsif key == "remaining_hours"
+        permission = :view_remaining_time
+      elsif key == "estimated_hours"
+        permission = :view_estimated_time 
+      elsif key.include?("custom_fields")
+        id = key.split("custom_fields_")[1].to_i
+        permission = "view_#{CustomField.find(id).name.parameterize.underscore}".to_sym
+      else
+        permission = "view_#{key}".to_sym
+      end
+
+      result.push(!recipient.allowed_to?(permission, project))
+    end
+
+    return result.all? { |authorization| authorization == true }
   end
 
   def update_notification(recipient_id, reason)
