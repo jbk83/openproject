@@ -140,6 +140,9 @@ export class ActivityPanelBaseController extends UntilDestroyedMixin implements 
   private reloadActivities() {
     void this.wpActivity.require(this.workPackage, true).then((activities:HalResource[]) => {
       activities = activities.filter(activity => activity.details.length > 0 || activity.comment.raw != "");
+      activities = activities.filter(activity => {
+        return activity.comment.raw != "_Les modifications ont été retirées._" && activity.comment.raw != "_The changes were retracted._";
+      });
       this.updateActivities(activities);
       this.cdRef.detectChanges();
 
