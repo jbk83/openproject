@@ -56,7 +56,7 @@ module API
             if params[:comment][:isPrivate].present? && !current_user.allowed_to?(:add_private_comment, @work_package.project)
               params[:comment][:isPrivate] = false
             end
-            @work_package.save
+
             result = AddWorkPackageNoteService
                        .new(user: current_user,
                             work_package: @work_package)
