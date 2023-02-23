@@ -83,8 +83,6 @@ module Acts::Journalized
 
     def with_ensured_journal_attributes
       self.journal_user ||= User.current
-      self.journal_notes ||= ''
-      self.journal_is_public ||= true
 
       yield
     ensure
