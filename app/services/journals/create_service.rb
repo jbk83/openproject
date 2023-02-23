@@ -620,7 +620,7 @@ module Journals
     end
 
     def only_one_note(predecessor, notes)
-      predecessor.notes.empty? || notes.empty?
+      (predecessor.notes.present? && predecessor.notes.empty?) || notes.empty?
     end
 
     def same_user?(predecessor)
