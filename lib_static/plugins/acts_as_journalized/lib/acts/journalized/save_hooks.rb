@@ -63,6 +63,11 @@ module Acts::Journalized
                       .new(self, @journal_user)
                       .call(notes: @journal_notes, is_public: @journal_is_public)
 
+        if create_call.success? && create_call.result && create_call.result.details.empty? && @journal_notes.blank?
+          create_call.result.destroy
+          return ServiceResult.success
+        end
+
         if create_call.success? && create_call.result
           OpenProject::Notifications.send(OpenProject::Events::JOURNAL_CREATED,
                                           journal: create_call.result,
@@ -83,6 +88,7 @@ module Acts::Journalized
 
     def with_ensured_journal_attributes
       self.journal_user ||= User.current
+      self.journal_notes ||= ''
 
       yield
     ensure
