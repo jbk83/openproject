@@ -59,11 +59,7 @@ module WorkPackages
         if attributes["custom_field_values"]
           new_attributes = {}
           attributes["custom_field_values"].each do |k, v|
-            permission = "view_#{CustomField.find(k).name}"
-                          .underscore
-                          .parameterize(separator: '_')
-                          .to_sym
-
+            permission = "view_custom_field_#{k}".to_sym
             new_attributes[k] = v if user.allowed_to?(permission, project)
           end
 

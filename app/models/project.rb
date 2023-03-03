@@ -398,7 +398,7 @@ class Project < ApplicationRecord
 
         base_permissions = OpenProject::AccessControl.modules_permissions(names).map(&:name)
         CustomField.where(type: "WorkPackageCustomField").each do |cf|
-          perm_name = "view_#{cf.name.underscore.parameterize(separator: '_')}".to_sym
+          perm_name = "view_custom_field_#{cf.id}".to_sym
           base_permissions.push(perm_name)
         end
 

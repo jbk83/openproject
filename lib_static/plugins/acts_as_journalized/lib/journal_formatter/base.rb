@@ -143,7 +143,7 @@ module JournalFormatter
 
     def user_allowed_to_see_custom_field(custom_field)
       return false unless custom_field 
-      perm_name = "view_#{custom_field.name.underscore.parameterize(separator: '_')}"
+      perm_name = "view_custom_field_#{custom_field.id}"
       User.current.admin? ||
         User.current.allowed_to?(perm_name.to_sym, @journal.journable.project)
     end

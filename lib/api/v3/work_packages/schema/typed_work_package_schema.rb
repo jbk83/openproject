@@ -49,7 +49,7 @@ module API
             else
               custom_fields = WorkPackage::AvailableCustomFields.for(work_package.project, work_package.type)
               custom_fields.select do |cf|
-                view_right = "view_#{cf.name.parameterize.underscore}".to_sym
+                view_right = "view_custom_field_#{cf.id}".to_sym
                 User.current.allowed_to?(view_right, work_package.project)
               end
             end

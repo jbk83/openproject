@@ -51,9 +51,8 @@ module RolesHelper
     custom_fields = CustomField.where(type: "WorkPackageCustomField")
 
     custom_fields.each do |cf|
-      perm_name = cf.name.underscore.parameterize(separator: '_')
       custom_perm = ::OpenProject::AccessControl::PermissionCustomField.new(
-        "view_#{perm_name}".to_sym, 
+        "view_custom_field_#{cf.id}".to_sym, 
         [],
         project_module: :work_package_tracking
       )

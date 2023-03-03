@@ -48,7 +48,7 @@ See COPYRIGHT and LICENSE files for more details.
 <%=  WorkPackage.human_attribute_name(:done_ratio) %>: <%= work_package.done_ratio %>
 <% end %>
 <% work_package.custom_field_values.each do |value| %>
-<% view_right = "view_#{value.custom_field.name.parameterize.underscore}".to_sym
+<% view_right = "view_custom_field_#{value.custom_field.id}".to_sym
 if @user.allowed_to?(view_right, work_package.project) %>
 <%=  value.custom_field.name %>: <%= show_value(value) %>
 <% end %>

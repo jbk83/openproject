@@ -88,7 +88,7 @@ class WorkPackages::BulkController < ApplicationController
     custom_fields = @projects.map(&:all_work_package_custom_fields).inject(&:&)
 
     @custom_fields = custom_fields.filter do |cf|
-      permission = "view_#{cf.name}".underscore.parameterize(separator: '_').to_sym
+      permission = "view_custom_field_#{cf.id}".to_sym
       @projects.any? { |p| current_user.allowed_to?(permission, p) }
     end
 

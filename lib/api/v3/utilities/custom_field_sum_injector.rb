@@ -41,7 +41,7 @@ module API
                         required: false,
                         writable: false,
                         show_if: ->(*) do
-                          view_right = "view_#{custom_field.name.parameterize.underscore}".to_sym
+                          view_right = "view_custom_field_#{custom_field.id}".to_sym
                           project = ::API::V3::Utilities::CustomFieldInjector::RepresenterClass.get_project
                           custom_field.summable? && User.current.allowed_to?(view_right, project)
                         end

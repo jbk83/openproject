@@ -131,7 +131,7 @@ class Notifications::CreateFromModelService
         permission = :view_estimated_time 
       elsif key.include?("custom_fields")
         id = key.split("custom_fields_")[1].to_i
-        permission = "view_#{CustomField.find(id).name.parameterize.underscore}".to_sym
+        permission = "view_custom_field_#{id}".to_sym
       else
         permission = "view_#{key}".to_sym
       end

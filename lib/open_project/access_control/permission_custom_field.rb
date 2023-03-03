@@ -30,7 +30,7 @@ module OpenProject
   module AccessControl
     class PermissionCustomField < Permission
       def field_name
-        cf = CustomField.find_by(permission_name: @name.to_s.split('view_')[1])
+        cf = CustomField.find(@name.to_s.split('view_custom_field_')[1].to_i)
 
         return "" if cf.nil?
 
