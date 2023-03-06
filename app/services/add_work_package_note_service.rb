@@ -48,13 +48,6 @@ class AddWorkPackageNoteService
         work_package.save_journals
       end
 
-      if errors.present? && errors.any? { |e| e.attribute.to_s.include?('custom_field') }
-        work_package.save
-
-        success, errors = validate_and_yield(work_package, user) do
-          work_package.save_journals
-        end
-      end
       journal = work_package.journals.last if success
       ServiceResult.new(success:, result: journal, errors:)
     end
