@@ -273,7 +273,7 @@ module API
               if filter.name == :estimated_hours
                 key = :view_estimated_time 
               elsif filter.respond_to?(:custom_field)
-                key = "view_#{filter.custom_field.name.parameterize.underscore}".to_sym
+                key = "view_custom_field_#{filter.custom_field.id}".to_sym
               else
                 key = "view_#{filter.name.to_s.gsub(/_id$/, '')}".to_sym
               end

@@ -12,7 +12,7 @@ module Exports
 
         return '' if custom_field.nil?
 
-        view_right = "view_#{custom_field.name.parameterize.underscore}".to_sym
+        view_right = "view_custom_field_#{custom_field.id}".to_sym
         return '' if !User.current.allowed_to?(view_right, object.project)
 
         format_for_export(object, custom_field)

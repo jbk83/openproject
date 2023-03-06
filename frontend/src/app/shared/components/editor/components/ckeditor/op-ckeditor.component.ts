@@ -181,8 +181,8 @@ export class OpCkeditorComponent implements OnInit, OnDestroy, AfterViewInit {
   ngOnInit() {
     try {
       this.initializeEditor();
-      const canPrivateComment = this.authorisation.can('work_package', 'privateComment');
-      const canPublicComment = this.authorisation.can('work_package', 'addComment');
+      const canPrivateComment = this.authorisation.can('work_package', 'privateComment') || jQuery(`#${this.fieldName}`).data('has-private-right');
+      const canPublicComment = this.authorisation.can('work_package', 'addComment') || jQuery(`#${this.fieldName}`).data('has-public-right');
       const parentIsPrivate = this.$element.parents('.op-user-activity').hasClass('op-user-activity--private');
       this.isPrivate = (canPrivateComment && !canPublicComment) || parentIsPrivate;
       this.isDisabled = (!canPrivateComment && canPublicComment) || (canPrivateComment && !canPublicComment);
@@ -202,8 +202,8 @@ export class OpCkeditorComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngAfterViewInit() {
     setTimeout(() => {
-      const canPrivateComment = this.authorisation.can('work_package', 'privateComment');
-      const canPublicComment = this.authorisation.can('work_package', 'addComment');
+      const canPrivateComment = this.authorisation.can('work_package', 'privateComment') || jQuery(`#${this.fieldName}`).data('has-private-right');
+      const canPublicComment = this.authorisation.can('work_package', 'addComment') || jQuery(`#${this.fieldName}`).data('has-public-right');
       this.isDisabled = (!canPrivateComment && canPublicComment) || (canPrivateComment && !canPublicComment);
     })
   }

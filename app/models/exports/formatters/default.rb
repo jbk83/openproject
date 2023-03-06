@@ -51,7 +51,7 @@ module Exports
       protected
 
       def check_permission
-        [:version, :done_ratio, :remaining_time, :remaining_time]
+        [:version, :done_ratio, :remaining_time, :estimated_time]
       end
 
       # By default, use try as a non-destructive accessor
