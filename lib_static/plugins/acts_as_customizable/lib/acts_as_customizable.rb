@@ -203,6 +203,16 @@ module Redmine
         end
 
         def ensure_custom_values_complete
+          missing_fields = []
+
+          #We push missing value for the user with no right to not destroy the values
+          custom_values.each do |cv|
+            if !custom_field_values.any? { |cfv| cfv.custom_field_id == cv.custom_field_id }
+              missing_fields.push(cv) if !User.current.allowed_to?("view_custom_field_#{cv.custom_field_id}".to_sym, cv.customized.project)
+            end
+          end
+
+          missing_fields.each { |mf| custom_field_values.push(mf) }
           return unless custom_values.loaded? && (custom_values.any?(&:changed?) || custom_value_destroyed)
 
           self.custom_values = custom_field_values
