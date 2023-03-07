@@ -247,7 +247,8 @@ module API
                           as: property_name(custom_field.id),
                           getter: property_value_getter_for(custom_field),
                           setter: property_value_setter_for(custom_field),
-                          render_nil: true
+                          render_nil: true,
+                          uncacheable: true
         end
 
         def property_value_getter_for(custom_field)

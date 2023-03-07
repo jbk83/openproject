@@ -56,7 +56,7 @@ module API
           end
 
           def no_caching?
-            false
+            true
           end
 
           private

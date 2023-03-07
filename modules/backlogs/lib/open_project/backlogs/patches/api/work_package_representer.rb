@@ -49,7 +49,8 @@ module OpenProject::Backlogs
                      skip_render: ->(represented:, **) do 
                        !represented.backlogs_enabled? || 
                        !User.current.allowed_to?(:view_remaining_time, represented.project)
-                     end
+                     end,
+                     uncacheable: true
 
             # cannot use def here as it wouldn't define the method on the representer
             define_method :remaining_time do
