@@ -120,7 +120,7 @@ class Notifications::CreateFromModelService
     cf_list = CustomField.where(type: "WorkPackageCustomField").map { |cf| "custom_fields_#{cf.id}" }
     permission_list = ["version_id", "done_ratio", "remaining_hours", "estimated_hours"] + cf_list
 
-    return false if changed_fields.keys.any? { |key| !permission_list.include?(key) }
+    return false if changed_fields.keys.count == 0 || changed_fields.keys.any? { |key| !permission_list.include?(key) }
 
     changed_fields.keys.each do |key|
       if key == "version_id"
